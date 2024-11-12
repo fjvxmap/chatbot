@@ -1,0 +1,221 @@
+{
+  "tasks": [
+    {
+      "task_id": 1,
+      "target_task": "계란 다루기",
+      "object_list": {
+        "계란": 6
+      },
+      "task_flow": {
+        "blocks": [
+          {
+            "block_id": 1,
+            "block_name": "계란 잡기",
+            "dependencies": [],
+            "instructions": [
+              {
+                "action": "계란 잡기",
+                "action_type": "grasp",
+                "action_code": "H1M0P3V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 0,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 잡으세요."
+              },
+              {
+                "action": "계란 놓기",
+                "action_type": "release",
+                "action_code": "H1M1P7V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 1,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 놓으세요."
+              }
+            ]
+          },
+          {
+            "block_id": 2,
+            "block_name": "계란 던지기",
+            "dependencies": [1],
+            "instructions": [
+              {
+                "action": "계란 잡기",
+                "action_type": "grasp",
+                "action_code": "H1M0P3V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 0,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 잡으세요."
+              },
+              {
+                "action": "계란 던지기",
+                "action_type": "squeeze",
+                "action_code": "H1M1P3V7T5",
+                "parameters": {
+                  "H": 1,
+                  "M": 1,
+                  "P": 5,
+                  "V": 7,
+                  "T": 5
+                },
+                "tts_text": "오른손으로 계란을 던지세요."
+              },
+              {
+                "action": "계란 놓기",
+                "action_type": "release",
+                "action_code": "H1M1P7V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 1,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 놓으세요."
+              }
+            ]
+          },
+          {
+            "block_id": 3,
+            "block_name": "계란 이리저리 움직이기",
+            "dependencies": [1],
+            "instructions": [
+              {
+                "action": "계란 잡기",
+                "action_type": "grasp",
+                "action_code": "H1M0P3V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 0,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 잡으세요."
+              },
+              {
+                "action": "계란 이리저리 움직이기",
+                "action_type": "tighten",
+                "action_code": "H1M1P5V5T5",
+                "parameters": {
+                  "H": 1,
+                  "M": 1,
+                  "P": 5,
+                  "V": 5,
+                  "T": 5
+                },
+                "tts_text": "오른손으로 계란을 이리저리 움직이세요."
+              },
+              {
+                "action": "계란 놓기",
+                "action_type": "release",
+                "action_code": "H1M1P7V5T3",
+                "parameters": {
+                  "H": 1,
+                  "M": 1,
+                  "P": 5,
+                  "V": 5,
+                  "T": 3
+                },
+                "tts_text": "오른손으로 계란을 놓으세요."
+              }
+            ]
+          }
+        ]
+      },
+      "task_checklist": [
+        {"block_id": 1, "action": "계란 잡기", "status": "대기"},
+        {"block_id": 2, "action": "계란 던지기", "status": "대기"},
+        {"block_id": 3, "action": "계란 이리저리 움직이기", "status": "대기"}
+      ],
+      "current_step": 1,
+      "history": []
+    }
+  ],
+  "power_words": {
+    "Wa": {"code": "a", "description": "챗봇 활성화", "usage_sample": "Wa"},
+    "Wc": {"code": "c", "description": "사용자에 의한 전체 동작 취소", "usage_sample": "Wc"},
+    "Wt": {"code": "t", "description": "봇의 판단에 의한 전체 동작 취소", "usage_sample": "Wt"},
+    "Ws": {"code": "s", "description": "프로세스 시작", "usage_sample": "Ws"},
+    "Wp": {"code": "p", "description": "프로세스 일시 정지", "usage_sample": "Wp"},
+    "Wd": {"code": "d", "description": "프로세스 종료", "usage_sample": "Wd"},
+    "Wx": {"code": "x", "description": "챗봇 비활성화", "usage_sample": "Wx"}
+  },
+  "parameters": {
+    "P": {
+      "definition": "엄지와 검지 중지간의 aperture 조절",
+      "type": "integer",
+      "range": "0~9",
+      "setting": {"narrow": 1, "mid": 5, "wide": 9},
+      "usage_example": "P5 (mid aperture)"
+    },
+    "V": {
+      "definition": "검지/중지 제어 와이어의 동작 가속도",
+      "type": "integer",
+      "range": "0~9",
+      "setting": {"low": 1, "mid": 5, "high": 9},
+      "usage_example": "V5 (mid velocity)"
+    },
+    "T": {
+      "definition": "검지/중지 제어 와이어의 장력",
+      "type": "integer",
+      "range": "0~9",
+      "setting": {"low": 1, "mid": 5, "high": 9},
+      "usage_example": "T3 (low tension)"
+    },
+    "H": {
+      "definition": "왼손, 오른손, 양손",
+      "type": "integer",
+      "range": "0~2",
+      "setting": {"left": 0, "right": 1, "both": 2},
+      "usage_example": "H1 (right hand)"
+    },
+    "M": {
+      "definition": "굽히기, 펴기",
+      "type": "integer",
+      "range": "0~1",
+      "setting": {"flex": 0, "extension": 1},
+      "usage_example": "M0 (flex)"
+    },
+    "O": {
+      "definition": "RS가 인식한 객체",
+      "type": "string",
+      "usage_example": "\"계란\""
+    },
+    "D": {
+      "definition": "RS가 인식한 이미지의 depth (미터 단위)",
+      "type": "float",
+      "usage_example": "0.5 (0.5 meters)"
+    },
+    "C": {
+      "definition": "RS가 인식한 이미지의 색상 (RGB 값)",
+      "type": "float",
+      "usage_example": "255 (RGB 값)"
+    },
+    "W": {
+      "definition": "특정 명령어 (activation, cancellation 등)",
+      "type": "object",
+      "properties": {
+        "Wa": {"definition": "챗봇 활성화", "type": "string", "value": "a"},
+        "Wc": {"definition": "사용자에 의한 전체 동작 취소", "type": "string", "value": "c"},
+        "Wt": {"definition": "봇의 판단에 의한 전체 동작 취소", "type": "string", "value": "t"},
+        "Ws": {"definition": "프로세스 시작", "type": "string", "value": "s"},
+        "Wp": {"definition": "프로세스 일시 정지", "type": "string", "value": "p"},
+        "Wd": {"definition": "프로세스 종료", "type": "string", "value": "d"},
+        "Wx": {"definition": "챗봇 비활성화", "type": "string", "value": "x"}
+      }
+    }
+  }
+}
