@@ -2,9 +2,10 @@
   "tasks": [
     {
       "task_id": 1,
-      "target_task": "계란 다루기",
+      "target_task": "계란 꺼내기",
       "object_list": {
-        "계란": 6
+        "계란": 6,
+        "접시": 1
       },
       "task_flow": {
         "blocks": [
@@ -16,66 +17,27 @@
               {
                 "action": "계란 잡기",
                 "action_type": "grasp",
-                "action_code": "H1M0P3V5T3",
+                "action_code": "H1M0P3V5T5",
                 "parameters": {
                   "H": 1,
                   "M": 0,
                   "P": 5,
                   "V": 5,
-                  "T": 3
+                  "T": 5
                 },
                 "tts_text": "오른손으로 계란을 잡으세요."
-              },
-              {
-                "action": "계란 놓기",
-                "action_type": "release",
-                "action_code": "H1M1P7V5T3",
-                "parameters": {
-                  "H": 1,
-                  "M": 1,
-                  "P": 5,
-                  "V": 5,
-                  "T": 3
-                },
-                "tts_text": "오른손으로 계란을 놓으세요."
               }
             ]
           },
           {
             "block_id": 2,
-            "block_name": "계란 던지기",
+            "block_name": "계란 접시에 놓기",
             "dependencies": [1],
             "instructions": [
               {
-                "action": "계란 잡기",
-                "action_type": "grasp",
-                "action_code": "H1M0P3V5T3",
-                "parameters": {
-                  "H": 1,
-                  "M": 0,
-                  "P": 5,
-                  "V": 5,
-                  "T": 3
-                },
-                "tts_text": "오른손으로 계란을 잡으세요."
-              },
-              {
-                "action": "계란 던지기",
-                "action_type": "squeeze",
-                "action_code": "H1M1P3V7T5",
-                "parameters": {
-                  "H": 1,
-                  "M": 1,
-                  "P": 5,
-                  "V": 7,
-                  "T": 5
-                },
-                "tts_text": "오른손으로 계란을 던지세요."
-              },
-              {
                 "action": "계란 놓기",
                 "action_type": "release",
-                "action_code": "H1M1P7V5T3",
+                "action_code": "H1M1P5V5T3",
                 "parameters": {
                   "H": 1,
                   "M": 1,
@@ -83,53 +45,7 @@
                   "V": 5,
                   "T": 3
                 },
-                "tts_text": "오른손으로 계란을 놓으세요."
-              }
-            ]
-          },
-          {
-            "block_id": 3,
-            "block_name": "계란 이리저리 움직이기",
-            "dependencies": [1],
-            "instructions": [
-              {
-                "action": "계란 잡기",
-                "action_type": "grasp",
-                "action_code": "H1M0P3V5T3",
-                "parameters": {
-                  "H": 1,
-                  "M": 0,
-                  "P": 5,
-                  "V": 5,
-                  "T": 3
-                },
-                "tts_text": "오른손으로 계란을 잡으세요."
-              },
-              {
-                "action": "계란 이리저리 움직이기",
-                "action_type": "tighten",
-                "action_code": "H1M1P5V5T5",
-                "parameters": {
-                  "H": 1,
-                  "M": 1,
-                  "P": 5,
-                  "V": 5,
-                  "T": 5
-                },
-                "tts_text": "오른손으로 계란을 이리저리 움직이세요."
-              },
-              {
-                "action": "계란 놓기",
-                "action_type": "release",
-                "action_code": "H1M1P7V5T3",
-                "parameters": {
-                  "H": 1,
-                  "M": 1,
-                  "P": 5,
-                  "V": 5,
-                  "T": 3
-                },
-                "tts_text": "오른손으로 계란을 놓으세요."
+                "tts_text": "오른손으로 계란을 접시에 놓으세요."
               }
             ]
           }
@@ -137,8 +53,7 @@
       },
       "task_checklist": [
         {"block_id": 1, "action": "계란 잡기", "status": "대기"},
-        {"block_id": 2, "action": "계란 던지기", "status": "대기"},
-        {"block_id": 3, "action": "계란 이리저리 움직이기", "status": "대기"}
+        {"block_id": 2, "action": "계란 접시에 놓기", "status": "대기"}
       ],
       "current_step": 1,
       "history": []

@@ -37,13 +37,13 @@ class Controller:
             self.view.display_instruction(instruction["tts_text"])
             return action_code
 
-    def wait_for_user(self, task_name):
+    def wait_for_user(self, task_name, accepting_command):
         while True:
             self.view.display_chatbot_message(f"{task_name} 시작할까요?")
             user_feedback = self.view.get_user_feedback()
             command = self.chatbot.interpret_command(user_feedback)
             if command:
-                if command == "Ws":
+                if command == accepting_command:
                     break
             else:
                 self.view.display_chatbot_message(
@@ -51,6 +51,7 @@ class Controller:
                 )
 
     def run(self, task_id):
+        """Run the task with the given task ID."""
         self.current_task_id = task_id
         task_blocks = self.model.get_task_blocks(task_id)
         task_block_index = 0
@@ -59,12 +60,12 @@ class Controller:
             current_block = task_blocks[task_block_index]
             instructions = current_block["instructions"]
             instruction_index = 0
-            self.wait_for_user(current_block["block_name"])
-            wait_for_user = False
+            self.wait_for_user(current_block["block_name"], "Ws")
+            need_to_wait = False
             while instruction_index < len(instructions):
-                if wait_for_user:
-                    self.wait_for_user(instructions[instruction_index]["action"])
-                    wait_for_user = False
+                if need_to_wait:
+                    self.wait_for_user(instructions[instruction_index]["action"], "Ws")
+                    need_to_wait = False
                 action_code = self.get_action_code(instructions[instruction_index])
                 if not action_code:
                     instruction_index += 1
@@ -82,7 +83,7 @@ class Controller:
                     elif command == "Wc":
                         self.view.display_chatbot_message("Command cancelled.")
                         self.send_command_to_mcu(f"H2M1P9V9T3")
-                        wait_for_user = True
+                        need_to_wait = True
                     elif command == "Ws":
                         instruction_index += 1
                     else:

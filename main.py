@@ -13,6 +13,7 @@ if __name__ == "__main__":
     )
     controller.activate_chatbot()
     # controller.process_image("data/test_image.jpg", "data/task_data_set.json")
+    controller.wait_for_user("사진 인식", "Ws")
     controller.process_image("data/eggs.jpg", "data/task_data_set.json")
 
     controller.run(1)
