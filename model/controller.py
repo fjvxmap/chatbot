@@ -2,6 +2,7 @@ import serial
 
 from model.model import Model
 from model.view import View
+from model.command import Command
 from vision.vision import Vision
 from chatbot.chatbot import Chatbot
 
@@ -17,8 +18,8 @@ class Controller:
         self.previous_command = None
         # self.serial_port = serial.Serial("COM10", 115200, timeout=1)
 
-    def initialize_chatbot(self, api_key, gpt_prompt, image_prompt):
-        self.chatbot = Chatbot(api_key, gpt_prompt, image_prompt)
+    def initialize_chatbot(self, api_key, gpt_prompt, image_prompt, pause_prompt):
+        self.chatbot = Chatbot(api_key, gpt_prompt, image_prompt, pause_prompt)
 
     def activate_chatbot(self):
         self.chatbot.activate_chatbot()
@@ -50,6 +51,28 @@ class Controller:
                     "I'm sorry, I didn't understand that."
                 )
 
+    def wait_for_process(self, task_name):
+        while True:
+            self.view.display_chatbot_message(f"{task_name} 계속 진행할까요?")
+            user_feedback = self.view.get_user_feedback()
+            command = self.chatbot.interpret_command(user_feedback, is_paused=True)
+            if command:
+                if command == "Ws":
+                    return Command.SKIP, command
+                elif command == "Wr":
+                    self.view.display_chatbot_message("Resuming the process.")
+                    return Command.RESUME, command
+                elif command == "Wc":
+                    self.view.display_chatbot_message("Command cancelled.")
+                    self.send_command_to_mcu(f"H2M1P9V9T3")
+                    return Command.CANCEL, command
+                else:
+                    return Command.FEEDBACK, command
+            else:
+                self.view.display_chatbot_message(
+                    "I'm sorry, I didn't understand that."
+                )
+
     def run(self, task_id):
         """Run the task with the given task ID."""
         self.current_task_id = task_id
@@ -61,29 +84,65 @@ class Controller:
             instructions = current_block["instructions"]
             instruction_index = 0
             self.wait_for_user(current_block["block_name"], "Ws")
-            need_to_wait = False
+            need_to_wait_user = False
+            need_to_wait_process = False
             while instruction_index < len(instructions):
-                if need_to_wait:
-                    self.wait_for_user(instructions[instruction_index]["action"], "Ws")
-                    need_to_wait = False
-                action_code = self.get_action_code(instructions[instruction_index])
-                if not action_code:
-                    instruction_index += 1
-                    continue
-                self.send_command_to_mcu(action_code)
-                self.previous_command = self.current_command
-                self.current_command = action_code
-                user_feedback = self.view.get_user_feedback()
-                command = self.chatbot.interpret_command(user_feedback)
+                if need_to_wait_user:
+                    task_name = instructions[instruction_index]["action"]
+                    if need_to_wait_process:
+                        pause_response, feedback_command = self.wait_for_process(
+                            task_name
+                        )
+                        if pause_response == Command.CANCEL:
+                            need_to_wait_process = False
+                            continue
+                        elif pause_response == Command.SKIP:
+                            need_to_wait_process = False
+                            instruction_index += 1
+                            continue
+                    else:
+                        self.wait_for_user(task_name, "Ws")
+                    need_to_wait_user = False
+                if not need_to_wait_process or (
+                    need_to_wait_process and pause_response == Command.RESUME
+                ):
+                    action_code = self.get_action_code(instructions[instruction_index])
+                    if not action_code:
+                        instruction_index += 1
+                        continue
+                    self.send_command_to_mcu(action_code)
+                    self.previous_command = self.current_command
+                    self.current_command = action_code
+                    user_feedback = self.view.get_user_feedback()
+                    command = self.chatbot.interpret_command(user_feedback)
+                    if need_to_wait_process:
+                        need_to_wait_process = False
+                elif pause_response == Command.FEEDBACK:
+                    command = feedback_command
+                    need_to_wait_user = True
                 if command:
                     if command == "Wa":
                         self.activate_chatbot()
                     elif command == "Wx":
                         self.deactivate_chatbot()
+                    elif command == "Wp":
+                        self.view.display_chatbot_message(
+                            "The process has been paused."
+                        )
+                        hand_value = self.current_command[
+                            self.current_command.index("H") + 1
+                        ]
+                        moter_value = self.current_command[
+                            self.current_command.index("M") + 1
+                        ]
+                        pause_command = f"H{hand_value}M{moter_value}V0"
+                        self.send_command_to_mcu(pause_command)
+                        need_to_wait_user = True
+                        need_to_wait_process = True
                     elif command == "Wc":
                         self.view.display_chatbot_message("Command cancelled.")
                         self.send_command_to_mcu(f"H2M1P9V9T3")
-                        need_to_wait = True
+                        need_to_wait_user = True
                     elif command == "Ws":
                         instruction_index += 1
                     else:
