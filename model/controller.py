@@ -42,8 +42,8 @@ class Controller:
 
     def wait_for_user(self, task_name, accepting_command):
         while True:
-            self.view.display_chatbot_message(f"{task_name}을(를) 시작할까요?")
-            self.voice_control.speak(f"{task_name}을(를) 시작할까요?")
+            self.view.display_chatbot_message(f"{task_name} 시작할까요?")
+            self.voice_control.speak(f"{task_name} 시작할까요?")
             user_feedback = self.voice_control.listen_to_user()  # 음성 입력
             if not user_feedback:
                 self.view.display_chatbot_message("죄송합니다. 다시 말씀해주세요.")
@@ -55,8 +55,8 @@ class Controller:
 
     def wait_for_process(self, task_name):
         while True:
-            self.view.display_chatbot_message(f"{task_name}을(를) 계속 진행할까요?")
-            self.voice_control.speak(f"{task_name}을(를) 계속 진행할까요?")
+            self.view.display_chatbot_message(f"{task_name} 계속 진행할까요?")
+            self.voice_control.speak(f"{task_name} 계속 진행할까요?")
             user_feedback = self.voice_control.listen_to_user()  # 음성 입력
             if not user_feedback:
                 self.view.display_chatbot_message("죄송합니다. 다시 말씀해주세요.")
@@ -65,12 +65,15 @@ class Controller:
             command = self.chatbot.interpret_command(user_feedback, is_paused=True)
             if command:
                 if command == "Ws":
+                    self.view.display_chatbot_message("작업을 건너뛰겠습니다.")
                     self.voice_control.speak("작업을 건너뛰겠습니다.")
                     return Command.SKIP, command
                 elif command == "Wr":
+                    self.view.display_chatbot_message("작업을 다시 시작하겠습니다.")
                     self.voice_control.speak("작업을 다시 시작하겠습니다.")
                     return Command.RESUME, command
                 elif command == "Wc":
+                    self.view.display_chatbot_message("작업을 취소합니다.")
                     self.voice_control.speak("작업을 취소합니다.")
                     self.send_command_to_mcu(f"H2M1P9V9T3")
                     return Command.CANCEL, command
@@ -130,9 +133,8 @@ class Controller:
                     elif command == "Wx":
                         self.deactivate_chatbot()
                     elif command == "Wp":
-                        self.view.display_chatbot_message(
-                            "The process has been paused."
-                        )
+                        self.view.display_chatbot_message("작업이 일시 중지되었습니다.")
+                        self.voice_control.speak("작업이 일시 중지되었습니다.")
                         hand_value = self.current_command[
                             self.current_command.index("H") + 1
                         ]
@@ -144,7 +146,8 @@ class Controller:
                         need_to_wait_user = True
                         need_to_wait_process = True
                     elif command == "Wc":
-                        self.view.display_chatbot_message("Command cancelled.")
+                        self.view.display_chatbot_message("작업이 취소되었습니다.")
+                        self.voice_control.speak("작업이 취소되었습니다.")
                         self.send_command_to_mcu(f"H2M1P9V9T3")
                         need_to_wait_user = True
                     elif command == "Ws":
@@ -170,9 +173,8 @@ class Controller:
                             "action_code"
                         ] = self.current_command
                 else:
-                    self.view.display_chatbot_message(
-                        "I'm sorry, I didn't understand that."
-                    )
+                    self.view.display_chatbot_message("죄송합니다. 다시 말씀해주세요.")
+                    self.voice_control.speak("죄송합니다. 다시 말씀해주세요.")
             task_block_index += 1
 
     def send_command_to_mcu(self, command: str):
@@ -186,9 +188,9 @@ class Controller:
         if response:
             with open(json_file_path, "w") as file:
                 file.write(response)
-            self.view.display_chatbot_message(f"Image has been processed successfully.")
+            self.view.display_chatbot_message(f"이미지 처리가 완료되었습니다.")
             self.model = Model(json_file_path)
         else:
             self.view.display_chatbot_message(
-                f"An error occurred while processing the image."
+                f"이미지 처리 중 오류가 발생했습니다. 다시 시도해주세요."
             )
