@@ -3,7 +3,8 @@ import serial
 from model.model import Model
 from model.view import View
 from model.command import Command
-from vision.vision import Vision
+from util.vision import Vision
+from util.voice_control import VoiceControl
 from chatbot.chatbot import Chatbot
 
 
@@ -12,6 +13,7 @@ class Controller:
         self.model = Model(json_file_path)
         self.view = View()
         self.vision = Vision()
+        self.voice_control = VoiceControl()
         self.current_task_id = None
         self.current_block_id = None
         self.current_command = None
@@ -40,38 +42,40 @@ class Controller:
 
     def wait_for_user(self, task_name, accepting_command):
         while True:
-            self.view.display_chatbot_message(f"{task_name} 시작할까요?")
-            user_feedback = self.view.get_user_feedback()
+            self.view.display_chatbot_message(f"{task_name}을(를) 시작할까요?")
+            self.voice_control.speak(f"{task_name}을(를) 시작할까요?")
+            user_feedback = self.voice_control.listen_to_user()  # 음성 입력
+            if not user_feedback:
+                self.view.display_chatbot_message("죄송합니다. 다시 말씀해주세요.")
+                self.voice_control.speak("죄송합니다. 다시 말씀해주세요.")
+                continue
             command = self.chatbot.interpret_command(user_feedback)
-            if command:
-                if command == accepting_command:
-                    break
-            else:
-                self.view.display_chatbot_message(
-                    "I'm sorry, I didn't understand that."
-                )
+            if command and command == accepting_command:
+                break
 
     def wait_for_process(self, task_name):
         while True:
-            self.view.display_chatbot_message(f"{task_name} 계속 진행할까요?")
-            user_feedback = self.view.get_user_feedback()
+            self.view.display_chatbot_message(f"{task_name}을(를) 계속 진행할까요?")
+            self.voice_control.speak(f"{task_name}을(를) 계속 진행할까요?")
+            user_feedback = self.voice_control.listen_to_user()  # 음성 입력
+            if not user_feedback:
+                self.view.display_chatbot_message("죄송합니다. 다시 말씀해주세요.")
+                self.voice_control.speak("죄송합니다. 다시 말씀해주세요.")
+                continue
             command = self.chatbot.interpret_command(user_feedback, is_paused=True)
             if command:
                 if command == "Ws":
+                    self.voice_control.speak("작업을 건너뛰겠습니다.")
                     return Command.SKIP, command
                 elif command == "Wr":
-                    self.view.display_chatbot_message("Resuming the process.")
+                    self.voice_control.speak("작업을 다시 시작하겠습니다.")
                     return Command.RESUME, command
                 elif command == "Wc":
-                    self.view.display_chatbot_message("Command cancelled.")
+                    self.voice_control.speak("작업을 취소합니다.")
                     self.send_command_to_mcu(f"H2M1P9V9T3")
                     return Command.CANCEL, command
                 else:
                     return Command.FEEDBACK, command
-            else:
-                self.view.display_chatbot_message(
-                    "I'm sorry, I didn't understand that."
-                )
 
     def run(self, task_id):
         """Run the task with the given task ID."""
