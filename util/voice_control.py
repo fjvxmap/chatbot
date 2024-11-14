@@ -17,7 +17,7 @@ class VoiceControl:
             with self.microphone as source:
                 # print("네, 듣고 있어요!")
                 self.console.print("[bold yellow]User:[/bold yellow] ", end="")
-                self.recognizer.adjust_for_ambient_noise(source)
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
                 audio = self.recognizer.listen(source)
                 command = self.recognizer.recognize_google(audio, language="ko-KR")
                 print(f"{command}")

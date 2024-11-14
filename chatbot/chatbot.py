@@ -28,12 +28,13 @@ class Chatbot:
         else:
             return None
 
-    def interpret_command(self, command_text, is_paused=False):
+    def interpret_command(self, command_text, is_paused=False, given_command=None):
         if self.is_active:
             if is_paused:
                 prompt = self.pause_prompt
             else:
                 prompt = self.gpt_prompt
+            prompt += f"\n{given_command}" if given_command else ""
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[

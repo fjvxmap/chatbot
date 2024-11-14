@@ -34,10 +34,12 @@ class Controller:
         action_type = instruction["action_type"]
         if action_type == "chatbot_message":
             self.view.display_chatbot_message(instruction["tts_text"])
+            self.voice_control.speak(instruction["tts_text"])
             return None
         else:
             action_code = instruction["action_code"]
             self.view.display_instruction(instruction["tts_text"])
+            self.voice_control.speak(instruction["tts_text"])
             return action_code
 
     def wait_for_user(self, task_name, accepting_command):
@@ -122,7 +124,10 @@ class Controller:
                     self.current_command = action_code
                     # user_feedback = self.view.get_user_feedback()
                     user_feedback = self.voice_control.listen_to_user()
-                    command = self.chatbot.interpret_command(user_feedback)
+                    command = self.chatbot.interpret_command(
+                        user_feedback,
+                        given_command=instructions[instruction_index]["tts_text"],
+                    )
                     if need_to_wait_process:
                         need_to_wait_process = False
                 elif pause_response == Command.FEEDBACK:
