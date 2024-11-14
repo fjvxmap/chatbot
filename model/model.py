@@ -12,7 +12,7 @@ class Model:
             with open(self.file_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
             return data
-        except (FileNotFoundError, json.JSONDecodeError) as e:
+        except (FileNotFoundError, json.JSONDecodeError, UnicodeDecodeError) as e:
             print(f"Error loading JSON file: {e}")
             return None
 

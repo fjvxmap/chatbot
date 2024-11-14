@@ -120,7 +120,8 @@ class Controller:
                     self.send_command_to_mcu(action_code)
                     self.previous_command = self.current_command
                     self.current_command = action_code
-                    user_feedback = self.view.get_user_feedback()
+                    # user_feedback = self.view.get_user_feedback()
+                    user_feedback = self.voice_control.listen_to_user()
                     command = self.chatbot.interpret_command(user_feedback)
                     if need_to_wait_process:
                         need_to_wait_process = False
@@ -186,7 +187,7 @@ class Controller:
         """Send image to chatbot for processing."""
         response = self.chatbot.process_image(image_path)
         if response:
-            with open(json_file_path, "w") as file:
+            with open(json_file_path, "w", encoding="utf-8") as file:
                 file.write(response)
             self.view.display_chatbot_message(f"이미지 처리가 완료되었습니다.")
             self.model = Model(json_file_path)
