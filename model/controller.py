@@ -185,8 +185,11 @@ class Controller:
 
     def send_command_to_mcu(self, command: str):
         """Send interpreted command to MCU."""
-        # self.serial_port.write(command.encode())
+        # self.serial_port.write(f"{command}\n".encode())
         self.view.display_command_sent(command)
+        # while self.serial_port.in_waiting > 0:
+        #     line = self.serial_port.readline().decode().strip()
+        #     print(f"Arduino says: {line}")
 
     def process_image(self, image_path, json_file_path):
         """Send image to chatbot for processing."""
