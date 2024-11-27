@@ -1,0 +1,193 @@
+{
+    "task_blocks": [
+        {
+            "id": 1,
+            "task_name": "빵 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "빵",
+            "instruction": "잡기",
+            "dependencies": [
+                5
+            ]
+        },
+        {
+            "id": 2,
+            "task_name": "햄 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "햄",
+            "instruction": "잡기",
+            "dependencies": [
+                1,
+                8,
+                7,
+                10
+            ]
+        },
+        {
+            "id": 3,
+            "task_name": "치즈 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "치즈",
+            "instruction": "잡기",
+            "dependencies": [
+                2,
+                4,
+                14,
+                5,
+                1
+            ]
+        },
+        {
+            "id": 4,
+            "task_name": "햄 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "햄",
+            "instruction": "놓기",
+            "dependencies": [
+                3,
+                2
+            ]
+        },
+        {
+            "id": 5,
+            "task_name": "치즈 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "치즈",
+            "instruction": "놓기",
+            "dependencies": [
+                4,
+                3,
+                5,
+                12,
+                10
+            ]
+        },
+        {
+            "id": 6,
+            "task_name": "칠면조 고기 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "칠면조 고기",
+            "instruction": "잡기",
+            "dependencies": [
+                5
+            ]
+        },
+        {
+            "id": 7,
+            "task_name": "칠면조 고기 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "칠면조 고기",
+            "instruction": "놓기",
+            "dependencies": [
+                6
+            ]
+        },
+        {
+            "id": 8,
+            "task_name": "빵 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "빵",
+            "instruction": "놓기",
+            "dependencies": [
+                1,
+                5,
+                13
+            ]
+        },
+        {
+            "id": 9,
+            "task_name": "터키 슬라이스 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "터키 슬라이스",
+            "instruction": "잡기",
+            "dependencies": [
+                5
+            ]
+        },
+        {
+            "id": 10,
+            "task_name": "터키 슬라이스 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "터키 슬라이스",
+            "instruction": "놓기",
+            "dependencies": [
+                9
+            ]
+        },
+        {
+            "id": 11,
+            "task_name": "머스타드 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "머스타드",
+            "instruction": "잡기",
+            "dependencies": [
+                10,
+                4,
+                16
+            ]
+        },
+        {
+            "id": 12,
+            "task_name": "머스타드 짜기",
+            "action_code": "H1M0P3T5",
+            "object": "머스타드",
+            "instruction": "조이기",
+            "dependencies": [
+                11
+            ]
+        },
+        {
+            "id": 13,
+            "task_name": "계란 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "계란",
+            "instruction": "잡기",
+            "dependencies": [
+                5,
+                8,
+                1
+            ]
+        },
+        {
+            "id": 14,
+            "task_name": "계란 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "계란",
+            "instruction": "놓기",
+            "dependencies": [
+                13,
+                8
+            ]
+        },
+        {
+            "id": 15,
+            "task_name": "식빵 잡기",
+            "action_code": "H1M0P3T5",
+            "object": "식빵",
+            "instruction": "잡기",
+            "dependencies": [
+                4
+            ]
+        },
+        {
+            "id": 16,
+            "task_name": "식빵 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "식빵",
+            "instruction": "놓기",
+            "dependencies": [
+                15
+            ]
+        },
+        {
+            "id": 17,
+            "task_name": "머스타드 놓기",
+            "action_code": "H1M0P3T5",
+            "object": "머스타드",
+            "instruction": "놓기",
+            "dependencies": [
+                12
+            ]
+        }
+    ]
+}
