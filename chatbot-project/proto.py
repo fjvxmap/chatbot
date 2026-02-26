@@ -94,12 +94,16 @@ def process_grasp_action(detected_object, depth_image, grasp_type="grasp"):
 
 
 if __name__ == "__main__":
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise ValueError("Missing OPENAI_API_KEY. Set it in your .env file.")
+
     # ser, model, depth_camera, recognizer, chatbot = initialize_system(
-    #     "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"
+    #     api_key
     # )
 
     chatbot = initialize_chatbot(
-        "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",
+        api_key,
         "data/task_data_set_prompt.txt",
     )
 
