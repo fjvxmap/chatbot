@@ -1,4 +1,4 @@
-# Chatbot Project
+# Task-Oriented LLM Robotics Controller
 
 This repository contains two versions of a voice-guided robotics chatbot system:
 
